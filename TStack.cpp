@@ -37,20 +37,15 @@ template <class T> TIterator<TStackItem<T>,T> TStack<T>::end()
 {
 	return TIterator<TStackItem<T>,T>(NULL);
 }
+template <class T> std::shared_ptr<T> top(void) {
+	return this->head->item;
+}
 
 template <class T> TStack<T>::~TStack() {
 
 }
 
 
-extern "C" Vector* new_vector() {
-    return new Vector;
-}
-extern "C" void delete_vector(Vector *tmp) {
-    delete tmp;
-}
-
-
-template class TStack<Figure>;
-template std::ostream& operator<<(std::ostream& os, const TStack<Figure>&
+template class TStack<NTree <Figure>>;
+template std::ostream& operator<<(std::ostream& os, const TStack<NTree <Figure>>&
 stack);

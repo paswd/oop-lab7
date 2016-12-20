@@ -7,18 +7,24 @@
 #include <cstdlib>
 
 template <class T> class Cluster {
+public:
 	shared_ptr<T> Element;
-	size_t Param;	
+	size_t Param;
+	bool IsEmpty;
+	bool IsOverload;
+
+	Cluster(void);
+	~Cluster(void);
 };
 
 
 template <class T> class NTreeNode {
 public:
-	std::vector <std::shared_ptr<T>> Clusters; //Элементы на одной высоте дерева
+	std::vector <Cluster <T>> Clusters; //Элементы на одной высоте дерева
 	NTreeNode *Parent; //Ссылка на родителя
 	NTreeNode *Child; //Ссылка на потомка
 	size_t Level; //Текущая высота
-	size_t ElementsCount;
+	size_t ClustersCnt;
 };
 
 template <class T> class NTree {
@@ -32,8 +38,12 @@ public:
 	NTree(void); //Конструктор аллокатора
 	~NTree(void); //Деструктор аллокатора
 
-	bool Push(std::shared_ptr<T> element, size_t param);
+	Cluster Push(std::shared_ptr<T> element, size_t param);
 	std::shared_ptr<T> Pop(size_t param);
+
+	bool IsEmpty(void);
+
+	template <class A> friend std::ostream& operator<<(std::ostream& os,const NTree<A>& ntree);
 };
 
 #endif /* FIGURE_H */

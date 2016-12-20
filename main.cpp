@@ -2,21 +2,21 @@
 #include "square.h"
 #include "trapeze.h"
 #include "rectangle.h"
-#include "TStack.h"
+#include "repo.h"
 
 using namespace std;
 
 int main(void)
 {
-	//TStack *stack = new TStack;
-	TStack <Figure> stack;
+	//Trepo *repo = new Trepo;
+	Repo repo;
 	cout << "-------------------------------------------\n";
 	cout << "Commands:\n";
-	cout << "s <value> - push Square to stack\n";
-	cout << "t <value> - push Trapeze to stack\n";
-	cout << "r <value> - push Rectangle to stack\n";
-	cout << "d - pop from stack and print popped item\n";
-	cout << "p - print stack\n";
+	cout << "s <value> - push Square to repo\n";
+	cout << "t <value> - push Trapeze to repo\n";
+	cout << "r <value> - push Rectangle to repo\n";
+	cout << "d <square> - pop from repo and print popped item\n";
+	cout << "p - print repo\n";
 	cout << "q - exit\n";
 	cout << "-------------------------------------------\n";
 	//int cnt = 0;
@@ -24,6 +24,7 @@ int main(void)
 		//cout << "%d\n", cnt;
 		//cnt++;
 		char cmd;
+		size_t param;
 		std::shared_ptr<Figure> value;
 		bool is_finished = false;
 		scanf("%c", &cmd);
@@ -35,29 +36,28 @@ int main(void)
 				//value = (Item) FSquare(std::cin);
 				//value 
 				//cin >> value;
-				stack.push(std::make_shared <FSquare> (cin));
+				repo.Push(std::make_shared <FSquare> (cin));
 				break;
 			case 't':
 				//value = (Item) FSquare(std::cin);
 				//cin >> value;
-				stack.push(std::make_shared <Trapeze> (cin));
+				repo.Push(std::make_shared <Trapeze> (cin));
 				break;
 			case 'r':
 				//value = (Item) FSquare(std::cin);
 				//cin >> r_value;
-				stack.push(std::make_shared <Rectangle> (cin));
+				repo.Push(std::make_shared <Rectangle> (cin));
 				break;
 			case 'd':
-				value = stack.pop();
+
+				cin >> param;
+				value = repo.pop(param);
 				if (value != NULL)
 					cout << *value << endl;
 				break;
 			case 'p':
-				//stack.Print();
-				//cout << stack << endl;
-				for (auto i : stack) {
-					cout << *i << endl;
-				}
+				//repo.Print();
+				cout << repo << endl;
 				break;
 			case '\n':
 				break;
@@ -69,7 +69,7 @@ int main(void)
 	}
 	cout << "Goodbye!\n";
 
-	//delete stack;
+	//delete repo;
 
 	return 0;
 }

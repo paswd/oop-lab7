@@ -3,8 +3,8 @@ COMPILLER=g++
 
 all: start
 
-start: geometry.o allocator.o figure.o square.o trapeze.o rectangle.o TStackItem.o TStack.o main.o
-	$(COMPILLER) $(FLAGS) -o oop-lab7 geometry.o allocator.o figure.o square.o trapeze.o rectangle.o TStackItem.o TStack.o main.o
+start: geometry.o n-tree.o figure.o square.o trapeze.o rectangle.o TStackItem.o TStack.o repo.o main.o
+	$(COMPILLER) $(FLAGS) -o oop-lab7 geometry.o n-tree.o figure.o square.o trapeze.o rectangle.o TStackItem.o TStack.o repo.o main.o
 
 main.o: main.cpp
 	$(COMPILLER) -c $(FLAGS) main.cpp
@@ -30,8 +30,11 @@ TStack.o: TStack.cpp
 TStackItem.o: TStackItem.cpp
 	$(COMPILLER) -c $(FLAGS) TStackItem.cpp
 
-allocator.o: allocator.cpp
-	$(COMPILLER) -c $(FLAGS) allocator.cpp
+n-tree.o: n-tree.cpp
+	$(COMPILLER) -c $(FLAGS) n-tree.cpp
+
+repo.o: repo.cpp
+	$(COMPILLER) -c $(FLAGS) repo.cpp
 
 clear:
 	-rm -f *.o *.gch oop-lab7

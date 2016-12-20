@@ -42,5 +42,5 @@ template <class T> void TStackItem<T>::operator delete(void *p) {
 	allocator.Free(p);
 }
 
-template class TStackItem<Figure>;
-template std::ostream& operator<<(std::ostream& os, const TStackItem<Figure>& obj);
+template class TStackItem <NTree <Figure>>;
+template std::ostream& operator<<(std::ostream& os, const TStackItem<NTree <Figure>>& obj);
