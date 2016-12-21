@@ -20,7 +20,7 @@ public:
 	//Проверка на пустоту
 	bool empty();
 	//Удаление
-	std::shared_ptr<Figure> Pop(void);
+	std::shared_ptr<Figure> Pop(size_t param);
 
 	friend std::ostream& operator<<(std::ostream& os,const Repo& repo);
 };

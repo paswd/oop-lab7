@@ -41,7 +41,7 @@ void Repo::Push(std::shared_ptr<Figure> &&item) {
 	if (this->stack.empty()) {
 		std::shared_ptr<NTree <Figure>> tree_tmp(new NTree<Figure>);
 		tree_tmp->Push(insert.Element, insert.Param);
-		this->stack.push(*tree_tmp);
+		this->stack.push(tree_tmp);
 		return;
 	}
 	while (!stack_tmp.empty()) {
@@ -54,7 +54,7 @@ std::shared_ptr<Figure> Repo::Pop(size_t param) {
 	std::shared_ptr<Figure> result;
 	while (!this->stack.empty()) {
 		std::shared_ptr<NTree <Figure>> tree_tmp = this->stack.pop();
-		result = tree_tmp.Pop(param);
+		result = tree_tmp->Pop(param);
 		if (!tree_tmp.IsEmpty()) {
 			stack_tmp.push(tree_tmp);
 		}
