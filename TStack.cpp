@@ -37,8 +37,8 @@ template <class T> TIterator<TStackItem<T>,T> TStack<T>::end()
 {
 	return TIterator<TStackItem<T>,T>(NULL);
 }
-template <class T> std::shared_ptr<T> top(void) {
-	return this->head->item;
+template <class T> std::shared_ptr<T> TStack<T>::top(void) {
+	return this->head->GetItem();
 }
 
 template <class T> TStack<T>::~TStack() {

@@ -22,9 +22,9 @@ void Repo::Push(std::shared_ptr<Figure> &&item) {
 	}*/
 
 	TStack <NTree <Figure>> stack_tmp;
-	Cluster res_tmp;
+	Cluster<Figure> res_tmp;
 	res_tmp.IsOverload = true;
-	Cluster insert;
+	Cluster<Figure> insert;
 	insert.Element = item;
 	insert.Param = item->Square();
 	while (!this->stack.empty()) {
@@ -40,7 +40,7 @@ void Repo::Push(std::shared_ptr<Figure> &&item) {
 	}
 	if (this->stack.empty()) {
 		std::shared_ptr<NTree <Figure>> tree_tmp(new NTree<Figure>);
-		tree_tmp->Push(item);
+		tree_tmp->Push(insert.Element, insert.Param);
 		this->stack.push(*tree_tmp);
 		return;
 	}

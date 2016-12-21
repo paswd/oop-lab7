@@ -22,7 +22,7 @@ public:
 	//Итератор: конец
 	TIterator<TStackItem<T>, T> end();
 
-	std::shared_ptr <T> top(void);
+	std::shared_ptr<T> top(void);
 
 	//Переопределение вывода
 	template <class A> friend std::ostream& operator<<(std::ostream& os,const TStack<A>& stack);

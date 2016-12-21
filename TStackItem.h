@@ -3,6 +3,7 @@
 #include <memory>
 #include "figure.h"
 #include "allocator.h"
+#include "n-tree.h"
 
 template<class T> class TStackItem {
 public:

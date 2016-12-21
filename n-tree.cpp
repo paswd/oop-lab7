@@ -3,44 +3,54 @@
 #include <cstdio>
 #include <cstdlib>
 #include "n-tree.h"
+#include "square.h"
+#include "trapeze.h"
+#include "rectangle.h"
 
 #define NTREE_CONST 2
 #define MAX_LEVEL_CNT 4
 
 using namespace std;
 
-template <class T> Cluster::Cluster(void) {
+template <class T> Cluster<T>::Cluster(void) {
 	//this->IsEmpty = false;
 	this->IsOverload = false;
 }
-template <class T> Cluster::~Cluster(void) {
+template <class T> Cluster<T>::~Cluster(void) {
 	
 }
+/*template <class T> Cluster<T>& Cluster<T>::operator=(Cluster<T> &cluster) {
+	this->Element = cluster.Element;
+	this->Param = cluster.Param;
+	this->IsEmpty = cluster.IsEmpty;
+	this->IsOverload = cluster.IsOverload;
+	return *this;
+}*/
 
 
-template <class T> NTree::NTree(void) {
+template <class T> NTree<T>::NTree(void) {
 	this->Root = NULL;
 	this->NConst = NTREE_CONST;
-	this->MaxLevelCnt = MAX_LEVEL_CNT;
+	this->MaxLevelsCnt = MAX_LEVEL_CNT;
 	//this->ClusterSize = cluster_size;
 }
 
-template <class T> NTree::~NTree(void) {
-	NodeNTree *tmp = this->Root;
+template <class T> NTree<T>::~NTree(void) {
+	NTreeNode<T> *tmp = this->Root;
 
 	while (tmp != NULL) {
-		NTreeNode *ths_tmp = tmp;
+		NTreeNode<T> *ths_tmp = tmp;
 		tmp = tmp->Child;
 		delete ths_tmp;
 	}
 }
 
-template <class T> Cluster NTree::Push(std::shared_ptr<T> element, size_t param) {
-	Cluster extra;
+template <class T> Cluster<T> NTree<T>::Push(std::shared_ptr<T> element, size_t param) {
+	Cluster<T> extra;
 	extra.Element = NULL;
 
 	if (this->Root == NULL) {
-		this->Root = new NTreeNode;
+		this->Root = new NTreeNode<T>;
 		this->Root->Child = NULL;
 		this->Root->Parent = NULL;
 		this->Root->Level = 0;
@@ -48,13 +58,13 @@ template <class T> Cluster NTree::Push(std::shared_ptr<T> element, size_t param)
 		this->Root->Clusters.resize(1);
 	}
 
-	NTreeNode *last = this->Root;
-	NTreeNode *current = NULL;
+	NTreeNode<T> *last = this->Root;
+	NTreeNode<T> *current = NULL;
 	size_t current_pos = 0;
-	bool full = false;
+	//bool full = false;
 	bool found = false;
 
-	Cluster insert;
+	Cluster<T> insert;
 	insert.Element = element;
 	insert.Param = param;
 
@@ -67,7 +77,7 @@ template <class T> Cluster NTree::Push(std::shared_ptr<T> element, size_t param)
 				current_pos = i;
 			}
 		}
-		if (last->Clild == NULL) {
+		if (last->Child == NULL) {
 			break;
 		}
 		cnt++;
@@ -78,13 +88,13 @@ template <class T> Cluster NTree::Push(std::shared_ptr<T> element, size_t param)
 		return extra;
 	}
 	if (last->ClustersCnt >= last->Clusters.size()) {
-		if (last->ClustersCnt < this->MaxLevelCnt) {
-			last->Child = new NTreeNode;
+		if (last->ClustersCnt < this->MaxLevelsCnt) {
+			last->Child = new NTreeNode<T>;
 			last->Child->Child = NULL;
 			last->Child->Parent = last;
 			last->Child->Level = last->Level + 1;
 			last->Child->ClustersCnt = 0;
-			last->Clild->Clusters.resize(last->Clusters.size() * this->NConst)
+			last->Child->Clusters.resize(last->Clusters.size() * this->NConst);
 			last = last->Child;
 		} else {
 			extra = last->Clusters[last->ClustersCnt - 1];
@@ -93,7 +103,7 @@ template <class T> Cluster NTree::Push(std::shared_ptr<T> element, size_t param)
 	}
 	//if (last->ClustersCnt < last->Clusters.size()) {
 	last->ClustersCnt++;
-	NTreeNode *tmp_node = last;
+	NTreeNode<T> *tmp_node = last;
 	while (tmp_node != NULL && tmp_node != current) {
 		if (tmp_node != last) {
 			tmp_node->Child->Clusters[0] = tmp_node->Clusters[tmp_node->ClustersCnt - 1];
@@ -108,15 +118,15 @@ template <class T> Cluster NTree::Push(std::shared_ptr<T> element, size_t param)
 	for (size_t i = current->ClustersCnt - 1; i > current_pos; i--) {
 		current->Clusters[i] = current->Clusters[i - 1];
 	}
-	current->Clusters[current_pos] = element;
+	current->Clusters[current_pos] = insert;
 	//}
 	return extra;
 }
 
-template <class T> std::shared_ptr<T> NTree::Pop(size_t param) {
+template <class T> std::shared_ptr<T> NTree<T>::Pop(size_t param) {
 	std::shared_ptr<T> res = NULL;
-	NTreeNode *node_tmp = this->root;
-	NTreeNode *node_prev = NULL;
+	NTreeNode<T> *node_tmp = this->Root;
+	NTreeNode<T> *node_prev = NULL;
 	bool found = false;
 	while (node_tmp != NULL && !found) {
 		for (size_t i = 0; i < node_tmp->ClustersCnt; i++) {
@@ -137,8 +147,9 @@ template <class T> std::shared_ptr<T> NTree::Pop(size_t param) {
 	}
 	//node_prev->Clusters.resize(node_prev->Clusters.size() - 1);
 	node_prev->ClustersCnt--;
+	return res;
 }
-template <class T> bool NTree::IsEmpty(size_t param) {
+template <class T> bool NTree<T>::IsEmpty(void) {
 	return this->Root->ClustersCnt > 0;
 }
 
@@ -149,7 +160,7 @@ template <class T> std::ostream& operator<<(std::ostream& os, const NTree<T>& nt
 		os << *item;
 		item = item->GetNext();
 	}*/
-	NTreeNode *ths = this->Root;
+	NTreeNode<T> *ths = ntree.Root;
 	while (ths != NULL) {
 		for (size_t i = 0; i < ths->ClustersCnt; i++) {
 			cout << *(ths->Clusters[i].Element);

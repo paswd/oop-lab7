@@ -1,6 +1,7 @@
 #include "TStackItem.h"
 #include <iostream>
 #include "allocator.h"
+#include "n-tree.h"
 
 
 template <class T> TStackItem<T>::TStackItem(const std::shared_ptr<T>& item) {
