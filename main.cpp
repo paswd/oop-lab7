@@ -51,7 +51,7 @@ int main(void)
 			case 'd':
 
 				cin >> param;
-				value = repo.pop(param);
+				value = repo.Pop(param);
 				if (value != NULL)
 					cout << *value << endl;
 				break;

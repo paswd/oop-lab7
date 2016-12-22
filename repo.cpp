@@ -39,9 +39,9 @@ void Repo::Push(std::shared_ptr<Figure> &&item) {
 		}
 	}
 	if (this->stack.empty()) {
-		std::shared_ptr<NTree <Figure>> tree_tmp(new NTree<Figure>);
-		tree_tmp->Push(insert.Element, insert.Param);
-		this->stack.push(tree_tmp);
+		NTree <Figure> tree_tmp;
+		tree_tmp.Push(insert.Element, insert.Param);
+		this->stack.push(std::make_shared<NTree<Figure>> (tree_tmp));
 		return;
 	}
 	while (!stack_tmp.empty()) {
@@ -53,10 +53,10 @@ std::shared_ptr<Figure> Repo::Pop(size_t param) {
 	TStack <NTree <Figure>> stack_tmp;
 	std::shared_ptr<Figure> result;
 	while (!this->stack.empty()) {
-		std::shared_ptr<NTree <Figure>> tree_tmp = this->stack.pop();
-		result = tree_tmp->Pop(param);
+		NTree <Figure> tree_tmp = *(this->stack.pop());
+		result = tree_tmp.Pop(param);
 		if (!tree_tmp.IsEmpty()) {
-			stack_tmp.push(tree_tmp);
+			stack_tmp.push(std::make_shared<NTree<Figure>> (tree_tmp));
 		}
 		if (result != NULL) {
 			break;
@@ -65,6 +65,12 @@ std::shared_ptr<Figure> Repo::Pop(size_t param) {
 	while (!stack_tmp.empty()) {
 		this->stack.push(stack_tmp.pop());
 	}
+	return result;
+}
+std::ostream& operator<<(std::ostream& os, const Repo& repo) {
+	os << repo.stack;
+
+	return os;
 }
 
 /*template class TStack<NTree <Figure>>;
